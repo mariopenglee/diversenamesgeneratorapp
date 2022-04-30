@@ -24,15 +24,15 @@ public class scr_Swipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         if (audioReference == "")
             noAudio();
         else
-            hasAudio();
+            hasAudio(audioReference);
     }
     public void noAudio()
     {
         commander.audioButton.SetActive(false);
     }
-    public void hasAudio()
+    public void hasAudio(string text)
     {
-        commander.RefToAudio(audioReference);
+        commander.RefToAudio(text);
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -52,7 +52,6 @@ public class scr_Swipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnBeginDrag(PointerEventData eventData)
     {
         PosInit = transform.localPosition;
-
     }
 
     private string GetDebuggerDisplay()
@@ -84,10 +83,16 @@ public class scr_Swipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         }
         
     }
+    void Next()
+    {
+        aCardMoved?.Invoke();
+        StartCoroutine(MoveCard());
+    }
+
     private IEnumerator MoveCard()
     {
         float time = 0;
-        while (GetComponent<Image>().color != new Color(1, 1, 1, 0))
+        while (GetComponentInChildren<Image>().color != new Color(1, 1, 1, 0))
         {
             time += Time.deltaTime;
             if (SwipeLeft)
@@ -98,18 +103,13 @@ public class scr_Swipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
             {
                 transform.localPosition = new Vector3(Mathf.SmoothStep(transform.localPosition.x, transform.localPosition.x +  Screen.width, speed * time), transform.localPosition.y, 0);
             }
-            GetComponent<Image>().color = new Color (1 ,1, 1, Mathf.SmoothStep(1, 0, speed*time));
+            GetComponentInChildren<Image>().color = new Color (1 ,1, 1, Mathf.SmoothStep(1, 0, speed*time));
             yield return null;
         }
         Destroy(gameObject);
     }
 
-    void Next()
-    {
-        aCardMoved?.Invoke();
-        StartCoroutine(MoveCard());
-    }
-
+    
     private void Update()
     {
 

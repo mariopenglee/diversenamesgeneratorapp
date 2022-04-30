@@ -27,7 +27,6 @@ public class scr_NextCard : MonoBehaviour
         oFirstCard = oSwipe.gameObject;
         oSwipe.aCardMoved += NextCard;
         transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
     }
 
     // Update is called once per frame

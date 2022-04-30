@@ -30,7 +30,7 @@ public class Instantiator : MonoBehaviour
         public string altIPA;
         public string orthography;
         public bool audioPerms;
-        public string audioRef;
+        public string audioRef = "";
         public string genderPref; //<unknown=-1 male=0 fem=1 gen-neutral=2>
         public string langPrim;
         public string langOther;
@@ -39,7 +39,6 @@ public class Instantiator : MonoBehaviour
         public string ecName;
         public string ecClass;
         public bool engPhon;
-
 
 
     }
@@ -225,12 +224,29 @@ public class Instantiator : MonoBehaviour
         }
 
         );
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
+        Destroy(FindObjectOfType<scr_NextCard>().gameObject);
+        Destroy(FindObjectOfType<scr_Swipe>().gameObject);
+
+        GameObject frontCard = Instantiate(cardPrefab, transform, false);
+        frontCard.transform.SetAsFirstSibling();
+
+        int fate = Random.Range(0, NamesList.Count);
+
+        frontCard.GetComponent<scr_NextCard>().SetText(NamesList[fate]);
+        frontCard.transform.localScale = new Vector3(1f, 1f, 1f);
+        frontCard.AddComponent<scr_Swipe>();
+        frontCard.GetComponent<scr_Swipe>().audioReference = NamesList[fate].audioRef;
+        Destroy(frontCard.GetComponent<scr_NextCard>());
+        AddCard();
+        reshuffling = false;
 
     }
 
     public void RefToAudio(string text)
     {
+        if (text == "")
+            return;
         if (text.StartsWith("/projects/random-names-generator/databases/(default)/random-names-generator.appspot.com/"))
             text = text.Remove(0, 88);
         Debug.Log(text);
@@ -296,7 +312,7 @@ public class Instantiator : MonoBehaviour
             if (child.gameObject.tag == "card")
                 counter++;
         }
-        if (counter > 2)
+        if (counter < 2)
             AddCard();
 
         yield return null;
