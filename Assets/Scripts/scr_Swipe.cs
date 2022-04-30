@@ -17,12 +17,23 @@ public class scr_Swipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     private int speed = 4;
 
     public event Action aCardMoved;
-
+    public string audioReference;
     private void Start()
     {
         commander = FindObjectOfType<Instantiator>();
+        if (audioReference == "")
+            noAudio();
+        else
+            hasAudio();
     }
-
+    public void noAudio()
+    {
+        commander.audioButton.SetActive(false);
+    }
+    public void hasAudio()
+    {
+        commander.RefToAudio(audioReference);
+    }
     public void OnDrag(PointerEventData eventData)
     {
         transform.localPosition = new Vector2(transform.localPosition.x + eventData.delta.x, transform.localPosition.y);

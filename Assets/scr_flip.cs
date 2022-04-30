@@ -54,9 +54,12 @@ public class scr_flip : MonoBehaviour
                 if (i == 90f)
                 {
                     face.gameObject.SetActive(false);
-                    back.gameObject.SetActive(true);
                     Visible = back;
                     aux = -180;
+
+                    back.gameObject.SetActive(true);
+                    
+                    
                 }
                 yield return new WaitForSeconds(0.01f);
             }
@@ -69,9 +72,10 @@ public class scr_flip : MonoBehaviour
                 if (i == 90f)
                 {
                     back.gameObject.SetActive(false);
-                    face.gameObject.SetActive(true);
                     Visible = face;
                     aux = -180;
+                    face.gameObject.SetActive(true);
+                    
                 }
                 yield return new WaitForSeconds(0.01f);
             }

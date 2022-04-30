@@ -11,6 +11,14 @@ public class scr_NextCard : MonoBehaviour
     public GameObject Frontside, Backside;
     public TextMeshProUGUI tname;
     public TextMeshProUGUI tipa;
+    public TextMeshProUGUI tgender;
+    public TextMeshProUGUI bNameIPA;
+    public TextMeshProUGUI bOrth;
+    public TextMeshProUGUI bLang;
+    public TextMeshProUGUI bNotes;
+    public TextMeshProUGUI bFam;
+    public TextMeshProUGUI bVar;
+    public string refToAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +33,8 @@ public class scr_NextCard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!oFirstCard)
+            return;
         float MovedDist = oFirstCard.transform.localPosition.x;
         if (Mathf.Abs(MovedDist) > 0)
         {
@@ -36,13 +46,25 @@ public class scr_NextCard : MonoBehaviour
     void NextCard()
     {
         gameObject.AddComponent<scr_Swipe>();
+        gameObject.GetComponent<scr_Swipe>().audioReference = refToAudio;
+
         oFlip.assignNewFrontCard(Frontside, Backside);
+
         Destroy(this);
     }
 
-    public void SetText(string name, string ipa)
+    public void SetText(Instantiator.DataStream data)
     {
-        tname.text = name;
-        tipa.text = "[" + ipa + "]";
+        tname.text = data.name;
+        tipa.text = "[" + data.ipa + "]";
+        tgender.text = data.genderPref;
+        bNameIPA.text = data.name + " [" + data.ipa + "]";
+        bVar.text = data.altName;
+        bOrth.text = data.orthography;
+        bLang.text = data.langPrim;
+        bFam.text = data.famous;
+        bNotes.text = data.notes;
+        refToAudio = data.audioRef;
+
     }
 }
